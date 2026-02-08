@@ -6,18 +6,17 @@ defmodule JsonParserElixir do
   @whitespace [?\s, ?\t, ?\n, ?\r]
 
   def parse(json_string) do
-    debug("String which should have value, to be pushed to stack: " <> json_string)
-    # Blank 1: Parse the JSON string with its value
+    debug("String which should have value, to be pushed to stack: #{json_string}")
+    parse(json_string, [:root], "")
   end
 
   def parse("", [:value], "") do
-    # Blank 2: Debug the null string
+    debug("Parsing null/empty value")
     {:ok, nil}
   end
 
   def parse("", [], output) when is_binary(output) do
     debug("Output displayed after JSON parsing: #{output}")
-    # Blank 3: Evaluate the code string against the output
     val = output
     {:ok, val}
   end
