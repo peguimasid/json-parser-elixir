@@ -16,28 +16,31 @@ defmodule JsonParserElixir do
   end
 
   defp parse("", [:value], "") do
-    debug("Parsing null/empty value")
     {:ok, nil}
   end
 
   defp parse("", [], output) do
-    debug("Output displayed after JSON parsing: #{output}")
     {:ok, output}
   end
 
   defp parse(<<s::utf8, _t::binary>>, _context = [:string | _], _output) when s in @whitespace do
-    debug("Inside a string, passing across empty space.")
     # Blank 4: Parse the string across an empty space
   end
 
   defp parse(<<s::utf8, t::binary>>, context, output) when s in @whitespace do
-    debug("Ignore the whitespace outside the string")
     parse(t, context, output)
   end
 
   defp parse("null" <> t, [:value | rest], _output) do
-    debug("Parse null value")
     parse(t, rest, nil)
+  end
+
+  defp parse("true" <> t, [:value | rest], _output) do
+    parse(t, rest, true)
+  end
+
+  defp parse("false" <> t, [:value | rest], _output) do
+    parse(t, rest, false)
   end
 
   defp debug(message) do

@@ -27,27 +27,27 @@ defmodule JsonParserElixirTest do
     end
   end
 
-  # # =============================================================================
-  # # BOOLEAN PARSING
-  # # =============================================================================
+  # =============================================================================
+  # BOOLEAN PARSING
+  # =============================================================================
 
-  # describe "parse/1 with booleans" do
-  #   test "parses true" do
-  #     assert JsonParserElixir.parse("true") == {:ok, true}
-  #   end
+  describe "parse/1 with booleans" do
+    test "parses true" do
+      assert JsonParserElixir.parse("true") == {:ok, true}
+    end
 
-  #   test "parses false" do
-  #     assert JsonParserElixir.parse("false") == {:ok, false}
-  #   end
+    test "parses false" do
+      assert JsonParserElixir.parse("false") == {:ok, false}
+    end
 
-  #   test "parses true with whitespace" do
-  #     assert JsonParserElixir.parse("  true  ") == {:ok, true}
-  #   end
+    test "parses true with whitespace" do
+      assert JsonParserElixir.parse("  true  ") == {:ok, true}
+    end
 
-  #   test "parses false with whitespace" do
-  #     assert JsonParserElixir.parse("  false  ") == {:ok, false}
-  #   end
-  # end
+    test "parses false with whitespace" do
+      assert JsonParserElixir.parse("  false  ") == {:ok, false}
+    end
+  end
 
   # # =============================================================================
   # # NUMBER PARSING
