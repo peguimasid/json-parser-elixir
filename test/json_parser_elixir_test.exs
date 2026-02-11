@@ -10,25 +10,21 @@ defmodule JsonParserElixirTest do
       assert JsonParserElixir.parse("") == {:ok, nil}
     end
 
-    # test "parses null" do
-    #   assert JsonParserElixir.parse("null") == {:ok, nil}
-    # end
+    test "parses null" do
+      assert JsonParserElixir.parse("null") == {:ok, nil}
+    end
 
-    # test "parses null with leading whitespace" do
-    #   assert JsonParserElixir.parse("  null") == {:ok, nil}
-    # end
+    test "parses null with leading whitespace" do
+      assert JsonParserElixir.parse("  null") == {:ok, nil}
+    end
 
-    # test "parses null with trailing whitespace" do
-    #   assert JsonParserElixir.parse("null  ") == {:ok, nil}
-    # end
+    test "parses null with trailing whitespace" do
+      assert JsonParserElixir.parse("null  ") == {:ok, nil}
+    end
 
-    # test "parses null with surrounding whitespace" do
-    #   assert JsonParserElixir.parse("  null  ") == {:ok, nil}
-    # end
-
-    # test "parses null with tabs and newlines" do
-    #   assert JsonParserElixir.parse("\t\nnull\r\n") == {:ok, nil}
-    # end
+    test "parses null with tabs and newlines" do
+      assert JsonParserElixir.parse("\t\nnull\r\n") == {:ok, nil}
+    end
   end
 
   # # =============================================================================
