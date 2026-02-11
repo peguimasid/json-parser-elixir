@@ -6,12 +6,6 @@ defmodule JsonParserElixir do
   @whitespace [?\s, ?\t, ?\n, ?\r]
 
   def parse(json_string) do
-    debug("""
-    String which should have value, to be pushed to stack:
-
-    "#{json_string}"
-    """)
-
     parse(json_string, [:value], "")
   end
 
@@ -41,9 +35,5 @@ defmodule JsonParserElixir do
 
   defp parse("false" <> t, [:value | rest], _output) do
     parse(t, rest, false)
-  end
-
-  defp debug(message) do
-    IO.puts("[DEBUG] #{message}")
   end
 end
