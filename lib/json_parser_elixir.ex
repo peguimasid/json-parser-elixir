@@ -37,4 +37,8 @@ defmodule JsonParserElixir do
   defp parse("false" <> t, [:value | rest], _output) do
     parse(t, rest, false)
   end
+
+  defp parse(<<c::utf8, t::binary>>, [:value | rest], output) when c in ?0..?9 do
+    IO.inspect("Number")
+  end
 end

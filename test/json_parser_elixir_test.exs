@@ -49,31 +49,31 @@ defmodule JsonParserElixirTest do
     end
   end
 
-  # # =============================================================================
-  # # NUMBER PARSING
-  # # =============================================================================
+  # =============================================================================
+  # NUMBER PARSING
+  # =============================================================================
 
-  # describe "parse/1 with integers" do
-  #   test "parses zero" do
-  #     assert JsonParserElixir.parse("0") == {:ok, 0}
-  #   end
+  describe "parse/1 with integers" do
+    test "parses zero" do
+      assert JsonParserElixir.parse("0") == {:ok, 0}
+    end
 
-  #   test "parses positive integer" do
-  #     assert JsonParserElixir.parse("42") == {:ok, 42}
-  #   end
+    # test "parses positive integer" do
+    #   assert JsonParserElixir.parse("42") == {:ok, 42}
+    # end
 
-  #   test "parses negative integer" do
-  #     assert JsonParserElixir.parse("-42") == {:ok, -42}
-  #   end
+    # test "parses negative integer" do
+    #   assert JsonParserElixir.parse("-42") == {:ok, -42}
+    # end
 
-  #   test "parses large integer" do
-  #     assert JsonParserElixir.parse("1234567890") == {:ok, 1_234_567_890}
-  #   end
+    # test "parses large integer" do
+    #   assert JsonParserElixir.parse("1234567890") == {:ok, 1_234_567_890}
+    # end
 
-  #   test "parses integer with whitespace" do
-  #     assert JsonParserElixir.parse("  123  ") == {:ok, 123}
-  #   end
-  # end
+    # test "parses integer with whitespace" do
+    #   assert JsonParserElixir.parse("  123  ") == {:ok, 123}
+    # end
+  end
 
   # describe "parse/1 with floats" do
   #   test "parses simple float" do
