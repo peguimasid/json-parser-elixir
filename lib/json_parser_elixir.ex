@@ -18,6 +18,7 @@ defmodule JsonParserElixir do
   end
 
   defp parse(<<s::utf8, _t::binary>>, _context = [:string | _], _output) when s in @whitespace do
+    # Inside a string, passing across empty spaces
     # Blank 4: Parse the string across an empty space
   end
 
