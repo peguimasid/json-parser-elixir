@@ -122,13 +122,13 @@ defmodule JsonParserElixirTest do
       assert JsonParserElixir.parse(~s("hello")) == {:ok, "hello"}
     end
 
-    # test "parses string with spaces" do
-    #   assert JsonParserElixir.parse(~s("hello world")) == {:ok, "hello world"}
-    # end
+    test "parses string with spaces" do
+      assert JsonParserElixir.parse(~s("hello world")) == {:ok, "hello world"}
+    end
 
-    # test "parses string with whitespace around it" do
-    #   assert JsonParserElixir.parse(~s(  "hello"  )) == {:ok, "hello"}
-    # end
+    test "parses string with whitespace around it" do
+      assert JsonParserElixir.parse(~s(  "hello"  )) == {:ok, "hello"}
+    end
 
     # test "parses string with escaped quote" do
     #   assert JsonParserElixir.parse(~s("say \\"hello\\"")) == {:ok, ~s(say "hello")}

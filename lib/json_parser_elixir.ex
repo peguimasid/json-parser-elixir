@@ -15,8 +15,8 @@ defmodule JsonParserElixir do
   defp parse("", [], acc), do: {:ok, acc}
 
   # preserve whitespace inside strings
-  defp parse(<<s::utf8, _t::binary>>, [:string | _], _acc) when s in @whitespace do
-    # TODO: accumulate whitespace inside strings
+  defp parse(<<c::utf8, t::binary>>, [:string | _] = ctx, acc) when c in @whitespace do
+    parse(t, ctx, acc <> <<c::utf8>>)
   end
 
   # skip whitespaces outside strings
