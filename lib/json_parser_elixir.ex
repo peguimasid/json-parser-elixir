@@ -38,7 +38,18 @@ defmodule JsonParserElixir do
     parse(t, rest, false)
   end
 
-  defp parse(<<c::utf8, t::binary>>, [:value | rest], output) when c in ?0..?9 do
-    IO.inspect("Number")
+  defp parse(<<c::utf8, t::binary>>, [:value | rest], output) when c in ?0..?9 or c == ?- do
+    IO.inspect("start num")
+    parse(<<c::utf8>> <> t, [:number | rest], output)
+  end
+
+  defp parse(<<c::utf8, t::binary>>, [:number | rest], output) when c in ?0..?9 or c == ?- do
+    IO.inspect("match num")
+    parse(t, [:number | rest], output <> <<c::utf8>>)
+  end
+
+  defp parse("", [:number | rest], output) do
+    IO.inspect("end num")
+    parse("", rest, String.to_integer(output))
   end
 end
