@@ -4,77 +4,64 @@ defmodule JsonParserElixir do
   """
 
   @whitespace [?\s, ?\t, ?\n, ?\r]
-  @digit_chars ?0..?9
   @float_chars [?., ?e, ?E, ?+, ?-]
 
   def parse(json_string) do
     parse(json_string, [:value], "")
   end
 
-  defp parse("", [:value], "") do
-    {:ok, nil}
+  # Base cases
+  defp parse("", [:value], ""), do: {:ok, nil}
+  defp parse("", [], output), do: {:ok, output}
+
+  # preserve whitespace inside strings
+  defp parse(<<s::utf8, _t::binary>>, [:string | _], _output) when s in @whitespace do
+    # TODO: accumulate whitespace inside strings
   end
 
-  defp parse("", [], output) do
-    {:ok, output}
-  end
-
-  defp parse(<<s::utf8, _t::binary>>, _context = [:string | _], _output) when s in @whitespace do
-    # Inside a string, passing across empty spaces
-    # Blank 4: Parse the string across an empty space
-  end
-
+  # skip whitespaces outside strings
   defp parse(<<s::utf8, t::binary>>, context, output) when s in @whitespace do
     parse(t, context, output)
   end
 
-  defp parse("null" <> t, [:value | rest], _output) do
-    parse(t, rest, nil)
+  # Keywords
+  defp parse("null" <> t, [:value | rest], _output), do: parse(t, rest, nil)
+  defp parse("true" <> t, [:value | rest], _output), do: parse(t, rest, true)
+  defp parse("false" <> t, [:value | rest], _output), do: parse(t, rest, false)
+
+  # Numbers: entry
+  defp parse(<<c::utf8, _::binary>> = input, [:value | rest], _output)
+       when c in ?0..?9 or c == ?- do
+    parse(input, [:number | rest], "")
   end
 
-  defp parse("true" <> t, [:value | rest], _output) do
-    parse(t, rest, true)
+  # Numbers: accumulate digits
+  defp parse(<<c::utf8, t::binary>>, [:number | _] = ctx, acc)
+       when c in ?0..?9 or c == ?- do
+    parse(t, ctx, acc <> <<c::utf8>>)
   end
 
-  defp parse("false" <> t, [:value | rest], _output) do
-    parse(t, rest, false)
+  # Numbers: digit transitions to float
+  defp parse(<<c::utf8, t::binary>>, [:number | rest], acc)
+       when c in @float_chars do
+    parse(t, [:float | rest], acc <> <<c::utf8>>)
   end
 
-  defp parse(<<c::utf8, t::binary>>, [:value | rest], output) when c in @digit_chars or c == ?- do
-    parse(<<c::utf8>> <> t, [:number | rest], output)
+  # Numbers: accumulate float characters
+  defp parse(<<c::utf8, t::binary>>, [:float | _] = ctx, acc)
+       when c in ?0..?9 or c in @float_chars do
+    parse(t, ctx, acc <> <<c::utf8>>)
   end
 
-  defp parse(<<c::utf8, t::binary>>, [:number | rest], output)
-       when c in @digit_chars or c == ?- do
-    parse(t, [:number | rest], output <> <<c::utf8>>)
-  end
-
-  defp parse(<<c::utf8, t::binary>>, [:number | rest], output)
-       when c in @digit_chars or c in @float_chars do
-    parse(t, [:float | rest], output <> <<c::utf8>>)
-  end
-
-  defp parse(<<c::utf8, t::binary>>, [:float | rest], output)
-       when c in @digit_chars or c in @float_chars do
-    parse(t, [:float | rest], output <> <<c::utf8>>)
-  end
-
-  defp parse("", [:number | rest], output) do
-    parse("", rest, String.to_integer(output))
-  end
-
-  defp parse("", [:float | rest], output) do
-    parse("", rest, to_float(output))
-  end
+  # Numbers: finalize
+  defp parse("", [:number | rest], acc), do: parse("", rest, String.to_integer(acc))
+  defp parse("", [:float | rest], acc), do: parse("", rest, to_float(acc))
 
   defp to_float(str) do
     if String.contains?(str, ".") do
       String.to_float(str)
     else
-      str
-      |> String.replace("e", ".0e")
-      |> String.replace("E", ".0E")
-      |> String.to_float()
+      str |> String.replace(~r/[eE]/, ".0\\0") |> String.to_float()
     end
   end
 end
