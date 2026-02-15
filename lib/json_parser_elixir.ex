@@ -58,33 +58,21 @@ defmodule JsonParserElixir do
   defp parse("", [:float | rest], acc), do: parse("", rest, to_float(acc))
 
   # Strings: entry
-  defp parse(<<c::utf8, t::binary>>, [:value | rest], _acc) when c == ?" do
-    IO.inspect("String entry")
-    parse(t, [:string | rest], "")
-  end
+  defp parse(<<?", t::binary>>, [:value | rest], _acc), do: parse(t, [:string | rest], "")
 
   # String: finalize
-  defp parse(<<c::utf8, t::binary>>, [:string | rest], acc) when c == ?" do
-    IO.inspect("String end")
-    parse(t, rest, acc)
-  end
+  defp parse(<<?", t::binary>>, [:string | rest], acc), do: parse(t, rest, acc)
 
   # String: handle unicode escape chars
-  defp parse(<<c1::utf8, c2::utf8, t::binary>>, [:string | _] = ctx, acc)
-       when c1 == ?\\ and c2 == ?u do
-    IO.inspect("String handle unicode escape")
-
-    <<unicode::binary-size(4), rest::binary>> = t
-
-    parse(rest, ctx, acc <> <<String.to_integer(unicode, 16)::utf8>>)
+  defp parse(<<?\\, ?u, a, b, c, d, t::binary>>, [:string | _] = ctx, acc) do
+    codepoint = String.to_integer(<<a, b, c, d>>, 16)
+    parse(t, ctx, acc <> <<codepoint::utf8>>)
   end
 
   # String: handle escape chars
-  defp parse(<<c1::utf8, c2::utf8, t::binary>>, [:string | _] = ctx, acc) when c1 == ?\\ do
-    IO.inspect("String handle escape")
-
+  defp parse(<<?\\, c::utf8, t::binary>>, [:string | _] = ctx, acc) do
     escaped_char =
-      case c2 do
+      case c do
         ?n -> "\n"
         ?r -> "\r"
         ?t -> "\t"
@@ -93,7 +81,7 @@ defmodule JsonParserElixir do
         ?" -> "\""
         ?\\ -> "\\"
         ?/ -> "/"
-        _ -> <<c2::utf8>>
+        _ -> <<c::utf8>>
       end
 
     parse(t, ctx, acc <> escaped_char)
@@ -101,7 +89,6 @@ defmodule JsonParserElixir do
 
   # String: accumulate chars
   defp parse(<<c::utf8, t::binary>>, [:string | _] = ctx, acc) do
-    IO.inspect("String acc")
     parse(t, ctx, acc <> <<c::utf8>>)
   end
 
