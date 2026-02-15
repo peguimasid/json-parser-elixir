@@ -12,25 +12,25 @@ defmodule JsonParserElixir do
 
   # Base cases
   defp parse("", [:value], ""), do: {:ok, nil}
-  defp parse("", [], output), do: {:ok, output}
+  defp parse("", [], acc), do: {:ok, acc}
 
   # preserve whitespace inside strings
-  defp parse(<<s::utf8, _t::binary>>, [:string | _], _output) when s in @whitespace do
+  defp parse(<<s::utf8, _t::binary>>, [:string | _], _acc) when s in @whitespace do
     # TODO: accumulate whitespace inside strings
   end
 
   # skip whitespaces outside strings
-  defp parse(<<s::utf8, t::binary>>, context, output) when s in @whitespace do
-    parse(t, context, output)
+  defp parse(<<s::utf8, t::binary>>, context, acc) when s in @whitespace do
+    parse(t, context, acc)
   end
 
   # Keywords
-  defp parse("null" <> t, [:value | rest], _output), do: parse(t, rest, nil)
-  defp parse("true" <> t, [:value | rest], _output), do: parse(t, rest, true)
-  defp parse("false" <> t, [:value | rest], _output), do: parse(t, rest, false)
+  defp parse("null" <> t, [:value | rest], _acc), do: parse(t, rest, nil)
+  defp parse("true" <> t, [:value | rest], _acc), do: parse(t, rest, true)
+  defp parse("false" <> t, [:value | rest], _acc), do: parse(t, rest, false)
 
   # Numbers: entry
-  defp parse(<<c::utf8, _::binary>> = input, [:value | rest], _output)
+  defp parse(<<c::utf8, _::binary>> = input, [:value | rest], _acc)
        when c in ?0..?9 or c == ?- do
     parse(input, [:number | rest], "")
   end
@@ -56,6 +56,26 @@ defmodule JsonParserElixir do
   # Numbers: finalize
   defp parse("", [:number | rest], acc), do: parse("", rest, String.to_integer(acc))
   defp parse("", [:float | rest], acc), do: parse("", rest, to_float(acc))
+
+  # Strings: entry
+  defp parse(<<c::utf8, t::binary>>, [:value | rest], _acc) when c == ?" do
+    IO.inspect("String entry")
+    parse(t, [:string | rest], "")
+  end
+
+  # String: accumulate chars
+  defp parse(<<c::utf8, t::binary>>, [:string | _] = ctx, acc) when c not in [?\\, ?"] do
+    IO.inspect("String acc")
+    parse(t, ctx, acc <> <<c::utf8>>)
+  end
+
+  # String: finalize
+  defp parse(<<c::utf8, _::binary>>, [:string | rest], acc) when c == ?" do
+    IO.inspect("String end")
+    parse("", rest, acc)
+  end
+
+  ### UTILS
 
   defp to_float(str) do
     if String.contains?(str, ".") do

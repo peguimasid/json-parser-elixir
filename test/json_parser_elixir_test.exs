@@ -113,55 +113,55 @@ defmodule JsonParserElixirTest do
   # # STRING PARSING
   # # =============================================================================
 
-  # describe "parse/1 with strings" do
-  #   test "parses empty string" do
-  #     assert JsonParserElixir.parse(~s("")) == {:ok, ""}
-  #   end
+  describe "parse/1 with strings" do
+    test "parses empty string" do
+      assert JsonParserElixir.parse(~s("")) == {:ok, ""}
+    end
 
-  #   test "parses simple string" do
-  #     assert JsonParserElixir.parse(~s("hello")) == {:ok, "hello"}
-  #   end
+    test "parses simple string" do
+      assert JsonParserElixir.parse(~s("hello")) == {:ok, "hello"}
+    end
 
-  #   test "parses string with spaces" do
-  #     assert JsonParserElixir.parse(~s("hello world")) == {:ok, "hello world"}
-  #   end
+    # test "parses string with spaces" do
+    #   assert JsonParserElixir.parse(~s("hello world")) == {:ok, "hello world"}
+    # end
 
-  #   test "parses string with whitespace around it" do
-  #     assert JsonParserElixir.parse(~s(  "hello"  )) == {:ok, "hello"}
-  #   end
+    # test "parses string with whitespace around it" do
+    #   assert JsonParserElixir.parse(~s(  "hello"  )) == {:ok, "hello"}
+    # end
 
-  #   test "parses string with escaped quote" do
-  #     assert JsonParserElixir.parse(~s("say \\"hello\\"")) == {:ok, ~s(say "hello")}
-  #   end
+    # test "parses string with escaped quote" do
+    #   assert JsonParserElixir.parse(~s("say \\"hello\\"")) == {:ok, ~s(say "hello")}
+    # end
 
-  #   test "parses string with escaped backslash" do
-  #     assert JsonParserElixir.parse(~s("back\\\\slash")) == {:ok, "back\\slash"}
-  #   end
+    # test "parses string with escaped backslash" do
+    #   assert JsonParserElixir.parse(~s("back\\\\slash")) == {:ok, "back\\slash"}
+    # end
 
-  #   test "parses string with escaped newline" do
-  #     assert JsonParserElixir.parse(~s("line1\\nline2")) == {:ok, "line1\nline2"}
-  #   end
+    # test "parses string with escaped newline" do
+    #   assert JsonParserElixir.parse(~s("line1\\nline2")) == {:ok, "line1\nline2"}
+    # end
 
-  #   test "parses string with escaped tab" do
-  #     assert JsonParserElixir.parse(~s("col1\\tcol2")) == {:ok, "col1\tcol2"}
-  #   end
+    # test "parses string with escaped tab" do
+    #   assert JsonParserElixir.parse(~s("col1\\tcol2")) == {:ok, "col1\tcol2"}
+    # end
 
-  #   test "parses string with escaped carriage return" do
-  #     assert JsonParserElixir.parse(~s("line\\rreturn")) == {:ok, "line\rreturn"}
-  #   end
+    # test "parses string with escaped carriage return" do
+    #   assert JsonParserElixir.parse(~s("line\\rreturn")) == {:ok, "line\rreturn"}
+    # end
 
-  #   test "parses string with unicode escape" do
-  #     assert JsonParserElixir.parse(~s("\\u0041")) == {:ok, "A"}
-  #   end
+    # test "parses string with unicode escape" do
+    #   assert JsonParserElixir.parse(~s("\\u0041")) == {:ok, "A"}
+    # end
 
-  #   test "parses string with multiple unicode escapes" do
-  #     assert JsonParserElixir.parse(~s("\\u0048\\u0065\\u006C\\u006C\\u006F")) == {:ok, "Hello"}
-  #   end
+    # test "parses string with multiple unicode escapes" do
+    #   assert JsonParserElixir.parse(~s("\\u0048\\u0065\\u006C\\u006C\\u006F")) == {:ok, "Hello"}
+    # end
 
-  #   test "parses string with mixed content" do
-  #     assert JsonParserElixir.parse(~s("Hello, \\u0057orld!")) == {:ok, "Hello, World!"}
-  #   end
-  # end
+    # test "parses string with mixed content" do
+    #   assert JsonParserElixir.parse(~s("Hello, \\u0057orld!")) == {:ok, "Hello, World!"}
+    # end
+  end
 
   # # =============================================================================
   # # ARRAY PARSING
