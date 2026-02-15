@@ -4,6 +4,8 @@ defmodule JsonParserElixir do
   """
 
   @whitespace [?\s, ?\t, ?\n, ?\r]
+  @digit_chars ?0..?9
+  @float_chars [?., ?e, ?E, ?+, ?-]
 
   def parse(json_string) do
     parse(json_string, [:value], "")
@@ -38,12 +40,13 @@ defmodule JsonParserElixir do
     parse(t, rest, false)
   end
 
-  defp parse(<<c::utf8, t::binary>>, [:value | rest], output) when c in ?0..?9 or c == ?- do
+  defp parse(<<c::utf8, t::binary>>, [:value | rest], output) when c in @digit_chars or c == ?- do
     IO.inspect("start num")
     parse(<<c::utf8>> <> t, [:number | rest], output)
   end
 
-  defp parse(<<c::utf8, t::binary>>, [:number | rest], output) when c in ?0..?9 or c == ?- do
+  defp parse(<<c::utf8, t::binary>>, [:number | rest], output)
+       when c in @digit_chars or c == ?- do
     IO.inspect("match num")
     parse(t, [:number | rest], output <> <<c::utf8>>)
   end
