@@ -69,6 +69,16 @@ defmodule JsonParserElixir do
     parse(t, rest, acc)
   end
 
+  # String: handle unicode escape chars
+  defp parse(<<c1::utf8, c2::utf8, t::binary>>, [:string | _] = ctx, acc)
+       when c1 == ?\\ and c2 == ?u do
+    IO.inspect("String handle unicode escape")
+
+    <<unicode::binary-size(4), rest::binary>> = t
+
+    parse(rest, ctx, acc <> <<String.to_integer(unicode, 16)::utf8>>)
+  end
+
   # String: handle escape chars
   defp parse(<<c1::utf8, c2::utf8, t::binary>>, [:string | _] = ctx, acc) when c1 == ?\\ do
     IO.inspect("String handle escape")

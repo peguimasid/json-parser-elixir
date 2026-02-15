@@ -154,13 +154,13 @@ defmodule JsonParserElixirTest do
       assert JsonParserElixir.parse(~s("\\u0041")) == {:ok, "A"}
     end
 
-    # test "parses string with multiple unicode escapes" do
-    #   assert JsonParserElixir.parse(~s("\\u0048\\u0065\\u006C\\u006C\\u006F")) == {:ok, "Hello"}
-    # end
+    test "parses string with multiple unicode escapes" do
+      assert JsonParserElixir.parse(~s("\\u0048\\u0065\\u006C\\u006C\\u006F")) == {:ok, "Hello"}
+    end
 
-    # test "parses string with mixed content" do
-    #   assert JsonParserElixir.parse(~s("Hello, \\u0057orld!")) == {:ok, "Hello, World!"}
-    # end
+    test "parses string with mixed content" do
+      assert JsonParserElixir.parse(~s("Hello, \\u0057orld!")) == {:ok, "Hello, World!"}
+    end
   end
 
   # # =============================================================================
