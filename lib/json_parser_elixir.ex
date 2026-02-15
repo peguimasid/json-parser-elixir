@@ -41,18 +41,40 @@ defmodule JsonParserElixir do
   end
 
   defp parse(<<c::utf8, t::binary>>, [:value | rest], output) when c in @digit_chars or c == ?- do
-    IO.inspect("start num")
     parse(<<c::utf8>> <> t, [:number | rest], output)
   end
 
   defp parse(<<c::utf8, t::binary>>, [:number | rest], output)
        when c in @digit_chars or c == ?- do
-    IO.inspect("match num")
     parse(t, [:number | rest], output <> <<c::utf8>>)
   end
 
+  defp parse(<<c::utf8, t::binary>>, [:number | rest], output)
+       when c in @digit_chars or c in @float_chars do
+    parse(t, [:float | rest], output <> <<c::utf8>>)
+  end
+
+  defp parse(<<c::utf8, t::binary>>, [:float | rest], output)
+       when c in @digit_chars or c in @float_chars do
+    parse(t, [:float | rest], output <> <<c::utf8>>)
+  end
+
   defp parse("", [:number | rest], output) do
-    IO.inspect("end num")
     parse("", rest, String.to_integer(output))
+  end
+
+  defp parse("", [:float | rest], output) do
+    parse("", rest, to_float(output))
+  end
+
+  defp to_float(str) do
+    if String.contains?(str, ".") do
+      String.to_float(str)
+    else
+      str
+      |> String.replace("e", ".0e")
+      |> String.replace("E", ".0E")
+      |> String.to_float()
+    end
   end
 end

@@ -75,39 +75,39 @@ defmodule JsonParserElixirTest do
     end
   end
 
-  # describe "parse/1 with floats" do
-  #   test "parses simple float" do
-  #     assert JsonParserElixir.parse("3.14") == {:ok, 3.14}
-  #   end
+  describe "parse/1 with floats" do
+    test "parses simple float" do
+      assert JsonParserElixir.parse("3.14") == {:ok, 3.14}
+    end
 
-  #   test "parses negative float" do
-  #     assert JsonParserElixir.parse("-3.14") == {:ok, -3.14}
-  #   end
+    test "parses negative float" do
+      assert JsonParserElixir.parse("-3.14") == {:ok, -3.14}
+    end
 
-  #   test "parses float with leading zero" do
-  #     assert JsonParserElixir.parse("0.5") == {:ok, 0.5}
-  #   end
+    test "parses float with leading zero" do
+      assert JsonParserElixir.parse("0.5") == {:ok, 0.5}
+    end
 
-  #   test "parses float with exponent" do
-  #     assert JsonParserElixir.parse("1.5e10") == {:ok, 1.5e10}
-  #   end
+    test "parses float with exponent" do
+      assert JsonParserElixir.parse("1.5e10") == {:ok, 1.5e10}
+    end
 
-  #   test "parses float with positive exponent" do
-  #     assert JsonParserElixir.parse("1.5e+10") == {:ok, 1.5e10}
-  #   end
+    test "parses float with positive exponent" do
+      assert JsonParserElixir.parse("1.5e+10") == {:ok, 1.5e10}
+    end
 
-  #   test "parses float with negative exponent" do
-  #     assert JsonParserElixir.parse("1.5e-10") == {:ok, 1.5e-10}
-  #   end
+    test "parses float with negative exponent" do
+      assert JsonParserElixir.parse("1.5e-10") == {:ok, 1.5e-10}
+    end
 
-  #   test "parses float with uppercase E" do
-  #     assert JsonParserElixir.parse("1.5E10") == {:ok, 1.5e10}
-  #   end
+    test "parses float with uppercase E" do
+      assert JsonParserElixir.parse("1.5E10") == {:ok, 1.5e10}
+    end
 
-  #   test "parses integer with exponent" do
-  #     assert JsonParserElixir.parse("5e2") == {:ok, 500.0}
-  #   end
-  # end
+    test "parses integer with exponent" do
+      assert JsonParserElixir.parse("5e2") == {:ok, 500.0}
+    end
+  end
 
   # # =============================================================================
   # # STRING PARSING
