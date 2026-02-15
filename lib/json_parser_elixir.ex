@@ -69,6 +69,26 @@ defmodule JsonParserElixir do
     parse(t, rest, acc)
   end
 
+  # String: handle escape chars
+  defp parse(<<c1::utf8, c2::utf8, t::binary>>, [:string | _] = ctx, acc) when c1 == ?\\ do
+    IO.inspect("String handle escape")
+
+    escaped_char =
+      case c2 do
+        ?n -> "\n"
+        ?r -> "\r"
+        ?t -> "\t"
+        ?b -> "\b"
+        ?f -> "\f"
+        ?" -> "\""
+        ?\\ -> "\\"
+        ?/ -> "/"
+        _ -> <<c2::utf8>>
+      end
+
+    parse(t, ctx, acc <> escaped_char)
+  end
+
   # String: accumulate chars
   defp parse(<<c::utf8, t::binary>>, [:string | _] = ctx, acc) do
     IO.inspect("String acc")
