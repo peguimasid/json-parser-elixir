@@ -63,16 +63,16 @@ defmodule JsonParserElixir do
     parse(t, [:string | rest], "")
   end
 
-  # String: accumulate chars
-  defp parse(<<c::utf8, t::binary>>, [:string | _] = ctx, acc) when c not in [?\\, ?"] do
-    IO.inspect("String acc")
-    parse(t, ctx, acc <> <<c::utf8>>)
+  # String: finalize
+  defp parse(<<c::utf8, t::binary>>, [:string | rest], acc) when c == ?" do
+    IO.inspect("String end")
+    parse(t, rest, acc)
   end
 
-  # String: finalize
-  defp parse(<<c::utf8, _::binary>>, [:string | rest], acc) when c == ?" do
-    IO.inspect("String end")
-    parse("", rest, acc)
+  # String: accumulate chars
+  defp parse(<<c::utf8, t::binary>>, [:string | _] = ctx, acc) do
+    IO.inspect("String acc")
+    parse(t, ctx, acc <> <<c::utf8>>)
   end
 
   ### UTILS
