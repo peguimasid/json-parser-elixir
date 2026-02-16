@@ -167,59 +167,59 @@ defmodule JsonParserElixirTest do
   # # ARRAY PARSING
   # # =============================================================================
 
-  # describe "parse/1 with arrays" do
-  test "parses empty array" do
-    assert JsonParserElixir.parse("[]") == {:ok, []}
+  describe "parse/1 with arrays" do
+    test "parses empty array" do
+      assert JsonParserElixir.parse("[]") == {:ok, []}
+    end
+
+    test "parses array with single null" do
+      assert JsonParserElixir.parse("[null]") == {:ok, [nil]}
+    end
+
+    test "parses array with single integer" do
+      assert JsonParserElixir.parse("[1]") == {:ok, [1]}
+    end
+
+    test "parses array with single string" do
+      assert JsonParserElixir.parse(~s(["hello"])) == {:ok, ["hello"]}
+    end
+
+    test "parses array with multiple integers" do
+      assert JsonParserElixir.parse("[1, 2, 3]") == {:ok, [1, 2, 3]}
+    end
+
+    test "parses array with mixed types" do
+      assert JsonParserElixir.parse(~s([1, "two", true, null])) == {:ok, [1, "two", true, nil]}
+    end
+
+    test "parses nested arrays" do
+      assert JsonParserElixir.parse("[[1, 2], [3, 4]]") == {:ok, [[1, 2], [3, 4]]}
+    end
+
+    test "parses deeply nested arrays" do
+      assert JsonParserElixir.parse("[[[1]]]") == {:ok, [[[1]]]}
+    end
+
+    test "parses array with whitespace" do
+      assert JsonParserElixir.parse("[ 1 , 2 , 3 ]") == {:ok, [1, 2, 3]}
+    end
+
+    test "parses array with newlines" do
+      json = """
+      [
+        1,
+        2,
+        3
+      ]
+      """
+
+      assert JsonParserElixir.parse(json) == {:ok, [1, 2, 3]}
+    end
+
+    test "parses empty array with whitespace" do
+      assert JsonParserElixir.parse("[   ]") == {:ok, []}
+    end
   end
-
-  test "parses array with single null" do
-    assert JsonParserElixir.parse("[null]") == {:ok, [nil]}
-  end
-
-  test "parses array with single integer" do
-    assert JsonParserElixir.parse("[1]") == {:ok, [1]}
-  end
-
-  test "parses array with single string" do
-    assert JsonParserElixir.parse(~s(["hello"])) == {:ok, ["hello"]}
-  end
-
-  # test "parses array with multiple integers" do
-  #   assert JsonParserElixir.parse("[1, 2, 3]") == {:ok, [1, 2, 3]}
-  # end
-
-  #   test "parses array with mixed types" do
-  #     assert JsonParserElixir.parse(~s([1, "two", true, null])) == {:ok, [1, "two", true, nil]}
-  #   end
-
-  #   test "parses nested arrays" do
-  #     assert JsonParserElixir.parse("[[1, 2], [3, 4]]") == {:ok, [[1, 2], [3, 4]]}
-  #   end
-
-  #   test "parses deeply nested arrays" do
-  #     assert JsonParserElixir.parse("[[[1]]]") == {:ok, [[[1]]]}
-  #   end
-
-  #   test "parses array with whitespace" do
-  #     assert JsonParserElixir.parse("[ 1 , 2 , 3 ]") == {:ok, [1, 2, 3]}
-  #   end
-
-  #   test "parses array with newlines" do
-  #     json = """
-  #     [
-  #       1,
-  #       2,
-  #       3
-  #     ]
-  #     """
-
-  #     assert JsonParserElixir.parse(json) == {:ok, [1, 2, 3]}
-  #   end
-
-  #   test "parses empty array with whitespace" do
-  #     assert JsonParserElixir.parse("[   ]") == {:ok, []}
-  #   end
-  # end
 
   # # =============================================================================
   # # OBJECT PARSING

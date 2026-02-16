@@ -92,8 +92,6 @@ defmodule JsonParserElixir do
     parse(t, ctx, acc <> <<c::utf8>>)
   end
 
-  ##################################################################
-
   # Arrays: entry - start array parsing
   defp parse(<<?[, t::binary>>, [:value | rest], _acc), do: parse(t, [:array | rest], [])
 
@@ -105,6 +103,9 @@ defmodule JsonParserElixir do
     ctx = [:value, {:array, acc}] ++ rest
     parse(value, ctx, acc)
   end
+
+  # Arrays: skip commas between elements
+  defp parse(<<?,, t::binary>>, ctx, acc), do: parse(t, ctx, acc)
 
   # Arrays: append parsed element to array
   defp parse(value, [{:array, elements} | rest], acc) do
