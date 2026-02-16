@@ -96,7 +96,7 @@ defmodule JsonParserElixir do
   defp parse(<<?[, t::binary>>, [:value | rest], _acc), do: parse(t, [:array | rest], [])
 
   # Arrays: finalize - close array and return it
-  defp parse(<<?], t::binary>>, [:array | rest], acc), do: parse(t, rest, acc)
+  defp parse(<<?], t::binary>>, [:array | rest], acc), do: parse(t, rest, Enum.reverse(acc))
 
   # Arrays: prepare to parse first element
   defp parse(value, [:array | rest], acc) do
@@ -109,7 +109,7 @@ defmodule JsonParserElixir do
 
   # Arrays: append parsed element to array
   defp parse(value, [{:array, elements} | rest], acc) do
-    parse(value, [:array | rest], elements ++ [acc])
+    parse(value, [:array | rest], [acc | elements])
   end
 
   ### UTILS
