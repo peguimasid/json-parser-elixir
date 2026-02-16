@@ -172,21 +172,21 @@ defmodule JsonParserElixirTest do
     assert JsonParserElixir.parse("[]") == {:ok, []}
   end
 
-  #   test "parses array with single null" do
-  #     assert JsonParserElixir.parse("[null]") == {:ok, [nil]}
-  #   end
+  test "parses array with single null" do
+    assert JsonParserElixir.parse("[null]") == {:ok, [nil]}
+  end
 
-  #   test "parses array with single integer" do
-  #     assert JsonParserElixir.parse("[1]") == {:ok, [1]}
-  #   end
+  test "parses array with single integer" do
+    assert JsonParserElixir.parse("[1]") == {:ok, [1]}
+  end
 
-  #   test "parses array with single string" do
-  #     assert JsonParserElixir.parse(~s(["hello"])) == {:ok, ["hello"]}
-  #   end
+  test "parses array with single string" do
+    assert JsonParserElixir.parse(~s(["hello"])) == {:ok, ["hello"]}
+  end
 
-  #   test "parses array with multiple integers" do
-  #     assert JsonParserElixir.parse("[1, 2, 3]") == {:ok, [1, 2, 3]}
-  #   end
+  # test "parses array with multiple integers" do
+  #   assert JsonParserElixir.parse("[1, 2, 3]") == {:ok, [1, 2, 3]}
+  # end
 
   #   test "parses array with mixed types" do
   #     assert JsonParserElixir.parse(~s([1, "two", true, null])) == {:ok, [1, "two", true, nil]}

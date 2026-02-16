@@ -94,17 +94,21 @@ defmodule JsonParserElixir do
 
   ##################################################################
 
-  # Arrays: entry
+  # Arrays: entry - start array parsing
   defp parse(<<?[, t::binary>>, [:value | rest], _acc), do: parse(t, [:array | rest], [])
 
-  # Arrays: finalize
+  # Arrays: finalize - close array and return it
   defp parse(<<?], t::binary>>, [:array | rest], acc), do: parse(t, rest, acc)
 
-  # Array: accumulate values
+  # Arrays: prepare to parse first element
   defp parse(value, [:array | rest], acc) do
     ctx = [:value, {:array, acc}] ++ rest
-    IO.inspect("acc: #{inspect(ctx)}")
     parse(value, ctx, acc)
+  end
+
+  # Arrays: append parsed element to array
+  defp parse(value, [{:array, elements} | rest], acc) do
+    parse(value, [:array | rest], elements ++ [acc])
   end
 
   ### UTILS
