@@ -54,8 +54,8 @@ defmodule JsonParserElixir do
   end
 
   # Numbers: finalize
-  defp parse("", [:number | rest], acc), do: parse("", rest, String.to_integer(acc))
-  defp parse("", [:float | rest], acc), do: parse("", rest, to_float(acc))
+  defp parse(value, [:number | rest], acc), do: parse(value, rest, String.to_integer(acc))
+  defp parse(value, [:float | rest], acc), do: parse(value, rest, to_float(acc))
 
   # Strings: entry
   defp parse(<<?", t::binary>>, [:value | rest], _acc), do: parse(t, [:string | rest], "")
@@ -97,13 +97,15 @@ defmodule JsonParserElixir do
   # Arrays: entry
   defp parse(<<?[, t::binary>>, [:value | rest], _acc), do: parse(t, [:array | rest], [])
 
-  # Array: accumulate values
-  # defp parse(<<c::utf8, t::binary>>, [:array | _] = ctx, acc) do
-  #   parse(t, ctx, acc <> <<c::utf8>>)
-  # end
-
   # Arrays: finalize
   defp parse(<<?], t::binary>>, [:array | rest], acc), do: parse(t, rest, acc)
+
+  # Array: accumulate values
+  defp parse(value, [:array | rest], acc) do
+    ctx = [:value, {:array, acc}] ++ rest
+    IO.inspect("acc: #{inspect(ctx)}")
+    parse(value, ctx, acc)
+  end
 
   ### UTILS
 
