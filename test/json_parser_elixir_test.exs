@@ -168,9 +168,9 @@ defmodule JsonParserElixirTest do
   # # =============================================================================
 
   # describe "parse/1 with arrays" do
-  #   test "parses empty array" do
-  #     assert JsonParserElixir.parse("[]") == {:ok, []}
-  #   end
+  test "parses empty array" do
+    assert JsonParserElixir.parse("[]") == {:ok, []}
+  end
 
   #   test "parses array with single null" do
   #     assert JsonParserElixir.parse("[null]") == {:ok, [nil]}

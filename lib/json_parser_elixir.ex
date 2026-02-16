@@ -92,6 +92,19 @@ defmodule JsonParserElixir do
     parse(t, ctx, acc <> <<c::utf8>>)
   end
 
+  ##################################################################
+
+  # Arrays: entry
+  defp parse(<<?[, t::binary>>, [:value | rest], _acc), do: parse(t, [:array | rest], [])
+
+  # Array: accumulate values
+  # defp parse(<<c::utf8, t::binary>>, [:array | _] = ctx, acc) do
+  #   parse(t, ctx, acc <> <<c::utf8>>)
+  # end
+
+  # Arrays: finalize
+  defp parse(<<?], t::binary>>, [:array | rest], acc), do: parse(t, rest, acc)
+
   ### UTILS
 
   defp to_float(str) do
