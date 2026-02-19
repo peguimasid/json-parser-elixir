@@ -92,22 +92,22 @@ defmodule JsonParserElixir do
     parse(t, ctx, acc <> <<c::utf8>>)
   end
 
-  # Arrays: entry - start array parsing
+  # Arrays: entry
   defp parse(<<?[, t::binary>>, [:value | rest], _acc), do: parse(t, [:array | rest], [])
 
-  # Arrays: finalize - close array and return it
+  # Arrays: finalize
   defp parse(<<?], t::binary>>, [:array | rest], acc), do: parse(t, rest, Enum.reverse(acc))
 
-  # Arrays: prepare to parse first element
+  # Arrays: prepare to parse next element
   defp parse(value, [:array | rest], acc) do
     ctx = [:value, {:array, acc}] ++ rest
     parse(value, ctx, acc)
   end
 
-  # Arrays: skip commas between elements
-  defp parse(<<?,, t::binary>>, ctx, acc), do: parse(t, ctx, acc)
+  # Skip commas between elements (arrays and objects)
+  defp parse(<<?,, t::binary>>, [:value | _] = ctx, acc), do: parse(t, ctx, acc)
 
-  # Arrays: append parsed element to array
+  # Arrays: collect parsed element into array
   defp parse(value, [{:array, elements} | rest], acc) do
     parse(value, [:array | rest], [acc | elements])
   end
@@ -118,8 +118,8 @@ defmodule JsonParserElixir do
   # Object: finalize
   defp parse(<<?}, t::binary>>, [:object | rest], acc), do: parse(t, rest, acc)
 
-  # Object: skip colons between keys and values
-  defp parse(<<?:, t::binary>>, ctx, acc), do: parse(t, ctx, acc)
+  # Object: skip colons between key and value
+  defp parse(<<?:, t::binary>>, [:value | _] = ctx, acc), do: parse(t, ctx, acc)
 
   # Object: prepare to parse next key
   defp parse(value, [:object | rest], acc) do
@@ -137,13 +137,24 @@ defmodule JsonParserElixir do
     parse(value, [:object | rest], Map.put(map, key, acc))
   end
 
+  # Error: unexpected character
+  defp parse(<<c::utf8, _::binary>>, _ctx, _acc) do
+    {:error, {:unexpected_character, <<c::utf8>>}}
+  end
+
+  # Error: unexpected end of input
+  defp parse("", _ctx, _acc), do: {:error, :unexpected_end_of_input}
+
   ### UTILS
 
   defp to_float(str) do
     if String.contains?(str, ".") do
       String.to_float(str)
     else
-      str |> String.replace(~r/[eE]/, ".0\\0") |> String.to_float()
+      str
+      |> String.replace("e", ".0e")
+      |> String.replace("E", ".0E")
+      |> String.to_float()
     end
   end
 end
