@@ -109,9 +109,9 @@ defmodule JsonParserElixirTest do
     end
   end
 
-  # # =============================================================================
-  # # STRING PARSING
-  # # =============================================================================
+  # =============================================================================
+  # STRING PARSING
+  # =============================================================================
 
   describe "parse/1 with strings" do
     test "parses empty string" do
@@ -163,9 +163,9 @@ defmodule JsonParserElixirTest do
     end
   end
 
-  # # =============================================================================
-  # # ARRAY PARSING
-  # # =============================================================================
+  # =============================================================================
+  # ARRAY PARSING
+  # =============================================================================
 
   describe "parse/1 with arrays" do
     test "parses empty array" do
@@ -221,9 +221,9 @@ defmodule JsonParserElixirTest do
     end
   end
 
-  # # =============================================================================
-  # # OBJECT PARSING
-  # # =============================================================================
+  # =============================================================================
+  # OBJECT PARSING
+  # =============================================================================
 
   describe "parse/1 with objects" do
     test "parses empty object" do
@@ -286,145 +286,137 @@ defmodule JsonParserElixirTest do
     end
   end
 
-  # # =============================================================================
-  # # COMPLEX NESTED STRUCTURES
-  # # =============================================================================
+  # =============================================================================
+  # COMPLEX NESTED STRUCTURES
+  # =============================================================================
 
-  # describe "parse/1 with complex structures" do
-  #   test "parses array of objects" do
-  #     json = ~s([{"id": 1}, {"id": 2}])
-  #     expected = [%{"id" => 1}, %{"id" => 2}]
-  #     assert JsonParserElixir.parse(json) == {:ok, expected}
-  #   end
+  describe "parse/1 with complex structures" do
+    test "parses array of objects" do
+      json = ~s([{"id": 1}, {"id": 2}])
+      expected = [%{"id" => 1}, %{"id" => 2}]
+      assert JsonParserElixir.parse(json) == {:ok, expected}
+    end
 
-  #   test "parses complex nested structure" do
-  #     json = """
-  #     {
-  #       "users": [
-  #         {"name": "Alice", "roles": ["admin", "user"]},
-  #         {"name": "Bob", "roles": ["user"]}
-  #       ],
-  #       "count": 2,
-  #       "active": true
-  #     }
-  #     """
+    test "parses complex nested structure" do
+      json = """
+      {
+        "users": [
+          {"name": "Alice", "roles": ["admin", "user"]},
+          {"name": "Bob", "roles": ["user"]}
+        ],
+        "count": 2,
+        "active": true
+      }
+      """
 
-  #     expected = %{
-  #       "users" => [
-  #         %{"name" => "Alice", "roles" => ["admin", "user"]},
-  #         %{"name" => "Bob", "roles" => ["user"]}
-  #       ],
-  #       "count" => 2,
-  #       "active" => true
-  #     }
+      expected = %{
+        "users" => [
+          %{"name" => "Alice", "roles" => ["admin", "user"]},
+          %{"name" => "Bob", "roles" => ["user"]}
+        ],
+        "count" => 2,
+        "active" => true
+      }
 
-  #     assert JsonParserElixir.parse(json) == {:ok, expected}
-  #   end
+      assert JsonParserElixir.parse(json) == {:ok, expected}
+    end
 
-  #   test "parses deeply nested mixed structure" do
-  #     json = ~s({"a": {"b": {"c": [1, 2, {"d": true}]}}})
-  #     expected = %{"a" => %{"b" => %{"c" => [1, 2, %{"d" => true}]}}}
-  #     assert JsonParserElixir.parse(json) == {:ok, expected}
-  #   end
-  # end
+    test "parses deeply nested mixed structure" do
+      json = ~s({"a": {"b": {"c": [1, 2, {"d": true}]}}})
+      expected = %{"a" => %{"b" => %{"c" => [1, 2, %{"d" => true}]}}}
+      assert JsonParserElixir.parse(json) == {:ok, expected}
+    end
+  end
 
-  # # =============================================================================
-  # # WHITESPACE HANDLING
-  # # =============================================================================
+  # =============================================================================
+  # WHITESPACE HANDLING
+  # =============================================================================
 
-  # describe "parse/1 whitespace handling" do
-  #   test "handles space character" do
-  #     assert JsonParserElixir.parse(" 42 ") == {:ok, 42}
-  #   end
+  describe "parse/1 whitespace handling" do
+    test "handles space character" do
+      assert JsonParserElixir.parse(" 42 ") == {:ok, 42}
+    end
 
-  #   test "handles tab character" do
-  #     assert JsonParserElixir.parse("\t42\t") == {:ok, 42}
-  #   end
+    test "handles tab character" do
+      assert JsonParserElixir.parse("\t42\t") == {:ok, 42}
+    end
 
-  #   test "handles newline character" do
-  #     assert JsonParserElixir.parse("\n42\n") == {:ok, 42}
-  #   end
+    test "handles newline character" do
+      assert JsonParserElixir.parse("\n42\n") == {:ok, 42}
+    end
 
-  #   test "handles carriage return" do
-  #     assert JsonParserElixir.parse("\r42\r") == {:ok, 42}
-  #   end
+    test "handles carriage return" do
+      assert JsonParserElixir.parse("\r42\r") == {:ok, 42}
+    end
 
-  #   test "handles mixed whitespace" do
-  #     assert JsonParserElixir.parse(" \t\n\r42 \t\n\r") == {:ok, 42}
-  #   end
+    test "handles mixed whitespace" do
+      assert JsonParserElixir.parse(" \t\n\r42 \t\n\r") == {:ok, 42}
+    end
 
-  #   test "preserves whitespace inside strings" do
-  #     assert JsonParserElixir.parse(~s("  spaces  ")) == {:ok, "  spaces  "}
-  #   end
+    test "preserves whitespace inside strings" do
+      assert JsonParserElixir.parse(~s("  spaces  ")) == {:ok, "  spaces  "}
+    end
 
-  #   test "preserves tabs inside strings" do
-  #     assert JsonParserElixir.parse(~s("\ttabs\t")) == {:ok, "\ttabs\t"}
-  #   end
-  # end
+    test "preserves tabs inside strings" do
+      assert JsonParserElixir.parse(~s("\ttabs\t")) == {:ok, "\ttabs\t"}
+    end
+  end
 
-  # # =============================================================================
-  # # ERROR HANDLING
-  # # =============================================================================
+  # =============================================================================
+  # ERROR HANDLING
+  # =============================================================================
 
-  # describe "parse/1 error cases" do
-  #   test "returns error for empty string" do
-  #     assert {:error, _} = JsonParserElixir.parse("")
-  #   end
+  describe "parse/1 error cases" do
+    test "returns error for invalid keyword" do
+      assert {:error, _} = JsonParserElixir.parse("nul")
+    end
 
-  #   test "returns error for whitespace only" do
-  #     assert {:error, _} = JsonParserElixir.parse("   ")
-  #   end
+    test "returns error for invalid true" do
+      assert {:error, _} = JsonParserElixir.parse("tru")
+    end
 
-  #   test "returns error for invalid keyword" do
-  #     assert {:error, _} = JsonParserElixir.parse("nul")
-  #   end
+    test "returns error for invalid false" do
+      assert {:error, _} = JsonParserElixir.parse("fals")
+    end
 
-  #   test "returns error for invalid true" do
-  #     assert {:error, _} = JsonParserElixir.parse("tru")
-  #   end
+    test "returns error for unclosed string" do
+      assert {:error, _} = JsonParserElixir.parse(~s("hello))
+    end
 
-  #   test "returns error for invalid false" do
-  #     assert {:error, _} = JsonParserElixir.parse("fals")
-  #   end
+    test "returns error for unclosed array" do
+      assert {:error, _} = JsonParserElixir.parse("[1, 2, 3")
+    end
 
-  #   test "returns error for unclosed string" do
-  #     assert {:error, _} = JsonParserElixir.parse(~s("hello))
-  #   end
+    test "returns error for unclosed object" do
+      assert {:error, _} = JsonParserElixir.parse(~s({"key": "value"))
+    end
 
-  #   test "returns error for unclosed array" do
-  #     assert {:error, _} = JsonParserElixir.parse("[1, 2, 3")
-  #   end
+    test "returns error for trailing comma in array" do
+      assert {:error, _} = JsonParserElixir.parse("[1, 2, 3,]")
+    end
 
-  #   test "returns error for unclosed object" do
-  #     assert {:error, _} = JsonParserElixir.parse(~s({"key": "value"))
-  #   end
+    test "returns error for trailing comma in object" do
+      assert {:error, _} = JsonParserElixir.parse(~s({"a": 1,}))
+    end
 
-  #   test "returns error for trailing comma in array" do
-  #     assert {:error, _} = JsonParserElixir.parse("[1, 2, 3,]")
-  #   end
+    test "returns error for missing colon in object" do
+      assert {:error, _} = JsonParserElixir.parse(~s({"key" "value"}))
+    end
 
-  #   test "returns error for trailing comma in object" do
-  #     assert {:error, _} = JsonParserElixir.parse(~s({"a": 1,}))
-  #   end
+    # test "returns error for non-string object key" do
+    #   assert {:error, _} = JsonParserElixir.parse("{123: \"value\"}")
+    # end
 
-  #   test "returns error for missing colon in object" do
-  #     assert {:error, _} = JsonParserElixir.parse(~s({"key" "value"}))
-  #   end
+    # test "returns error for leading zeros in numbers" do
+    #   assert {:error, _} = JsonParserElixir.parse("007")
+    # end
 
-  #   test "returns error for non-string object key" do
-  #     assert {:error, _} = JsonParserElixir.parse("{123: \"value\"}")
-  #   end
+    # test "returns error for invalid escape sequence" do
+    #   assert {:error, _} = JsonParserElixir.parse(~s("invalid \\x escape"))
+    # end
 
-  #   test "returns error for leading zeros in numbers" do
-  #     assert {:error, _} = JsonParserElixir.parse("007")
-  #   end
-
-  #   test "returns error for invalid escape sequence" do
-  #     assert {:error, _} = JsonParserElixir.parse(~s("invalid \\x escape"))
-  #   end
-
-  #   test "returns error for multiple values without structure" do
-  #     assert {:error, _} = JsonParserElixir.parse("1 2 3")
-  #   end
-  # end
+    # test "returns error for multiple values without structure" do
+    #   assert {:error, _} = JsonParserElixir.parse("1 2 3")
+    # end
+  end
 end

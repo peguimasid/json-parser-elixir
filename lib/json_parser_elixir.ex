@@ -118,18 +118,20 @@ defmodule JsonParserElixir do
   # Object: finalize
   defp parse(<<?}, t::binary>>, [:object | rest], acc), do: parse(t, rest, acc)
 
-  # Object: skip colons between key and value
-  defp parse(<<?:, t::binary>>, [:value | _] = ctx, acc), do: parse(t, ctx, acc)
-
   # Object: prepare to parse next key
   defp parse(value, [:object | rest], acc) do
     ctx = [:value, {:object, acc}] ++ rest
     parse(value, ctx, acc)
   end
 
-  # Object: save key, prepare to parse value
+  # Object: save key, expect colon before value
   defp parse(value, [{:object, map} | rest], acc) do
-    parse(value, [:value, {:object, acc, map} | rest], acc)
+    parse(value, [:expect_colon, {:object, acc, map} | rest], acc)
+  end
+
+  # Object: consume colon, proceed to parse value
+  defp parse(<<?:, t::binary>>, [:expect_colon | rest], acc) do
+    parse(t, [:value | rest], acc)
   end
 
   # Object: collect value into map (key from tuple, value from acc)
