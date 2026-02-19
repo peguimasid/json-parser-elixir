@@ -135,7 +135,7 @@ defmodule JsonParserElixir do
   end
 
   # Object: collect value into map (key from tuple, value from acc)
-  defp parse(value, [{:object, key, map} | rest], acc) do
+  defp parse(value, [{:object, key, map} | rest], acc) when is_binary(key) do
     parse(value, [:object | rest], Map.put(map, key, acc))
   end
 

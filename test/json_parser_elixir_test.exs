@@ -403,9 +403,9 @@ defmodule JsonParserElixirTest do
       assert {:error, _} = JsonParserElixir.parse(~s({"key" "value"}))
     end
 
-    # test "returns error for non-string object key" do
-    #   assert {:error, _} = JsonParserElixir.parse("{123: \"value\"}")
-    # end
+    test "returns error for non-string object key" do
+      assert {:error, _} = JsonParserElixir.parse("{123: \"value\"}")
+    end
 
     # test "returns error for leading zeros in numbers" do
     #   assert {:error, _} = JsonParserElixir.parse("007")
