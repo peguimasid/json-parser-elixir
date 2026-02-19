@@ -112,6 +112,12 @@ defmodule JsonParserElixir do
     parse(value, [:array | rest], [acc | elements])
   end
 
+  # Object: entry - start object parsing
+  defp parse(<<?{, t::binary>>, [:value | rest], _acc), do: parse(t, [:object | rest], %{})
+
+  # Object: finalize - close object and return it
+  defp parse(<<?}, t::binary>>, [:object | rest], acc), do: parse(t, rest, acc)
+
   ### UTILS
 
   defp to_float(str) do
