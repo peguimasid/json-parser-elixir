@@ -19,6 +19,15 @@ defmodule JsonParserElixir do
     parse(t, ctx, acc <> <<c::utf8>>)
   end
 
+  # whitespace finalizes numbers
+  defp parse(<<s::utf8, _::binary>> = input, [:number | rest], acc) when s in @whitespace do
+    parse(input, rest, String.to_integer(acc))
+  end
+
+  defp parse(<<s::utf8, _::binary>> = input, [:float | rest], acc) when s in @whitespace do
+    parse(input, rest, to_float(acc))
+  end
+
   # skip whitespaces outside strings
   defp parse(<<s::utf8, t::binary>>, context, acc) when s in @whitespace do
     parse(t, context, acc)
@@ -71,20 +80,17 @@ defmodule JsonParserElixir do
 
   # String: handle escape chars
   defp parse(<<?\\, c::utf8, t::binary>>, [:string | _] = ctx, acc) do
-    escaped_char =
-      case c do
-        ?n -> "\n"
-        ?r -> "\r"
-        ?t -> "\t"
-        ?b -> "\b"
-        ?f -> "\f"
-        ?" -> "\""
-        ?\\ -> "\\"
-        ?/ -> "/"
-        _ -> <<c::utf8>>
-      end
-
-    parse(t, ctx, acc <> escaped_char)
+    case c do
+      ?n -> parse(t, ctx, acc <> "\n")
+      ?r -> parse(t, ctx, acc <> "\r")
+      ?t -> parse(t, ctx, acc <> "\t")
+      ?b -> parse(t, ctx, acc <> "\b")
+      ?f -> parse(t, ctx, acc <> "\f")
+      ?" -> parse(t, ctx, acc <> "\"")
+      ?\\ -> parse(t, ctx, acc <> "\\")
+      ?/ -> parse(t, ctx, acc <> "/")
+      _ -> {:error, {:invalid_escape, <<c::utf8>>}}
+    end
   end
 
   # String: accumulate chars

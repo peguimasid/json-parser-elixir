@@ -407,16 +407,12 @@ defmodule JsonParserElixirTest do
       assert {:error, _} = JsonParserElixir.parse("{123: \"value\"}")
     end
 
-    # test "returns error for leading zeros in numbers" do
-    #   assert {:error, _} = JsonParserElixir.parse("007")
-    # end
+    test "returns error for invalid escape sequence" do
+      assert {:error, _} = JsonParserElixir.parse(~s("invalid \\x escape"))
+    end
 
-    # test "returns error for invalid escape sequence" do
-    #   assert {:error, _} = JsonParserElixir.parse(~s("invalid \\x escape"))
-    # end
-
-    # test "returns error for multiple values without structure" do
-    #   assert {:error, _} = JsonParserElixir.parse("1 2 3")
-    # end
+    test "returns error for multiple values without structure" do
+      assert {:error, _} = JsonParserElixir.parse("1 2 3")
+    end
   end
 end
