@@ -230,60 +230,60 @@ defmodule JsonParserElixirTest do
       assert JsonParserElixir.parse("{}") == {:ok, %{}}
     end
 
-    # test "parses object with single string value" do
-    #   assert JsonParserElixir.parse(~s({"name": "John"})) == {:ok, %{"name" => "John"}}
-    # end
+    test "parses object with single string value" do
+      assert JsonParserElixir.parse(~s({"name": "John"})) == {:ok, %{"name" => "John"}}
+    end
 
-    # test "parses object with single integer value" do
-    #   assert JsonParserElixir.parse(~s({"age": 30})) == {:ok, %{"age" => 30}}
-    # end
+    test "parses object with single integer value" do
+      assert JsonParserElixir.parse(~s({"age": 30})) == {:ok, %{"age" => 30}}
+    end
 
-    # test "parses object with single boolean value" do
-    #   assert JsonParserElixir.parse(~s({"active": true})) == {:ok, %{"active" => true}}
-    # end
+    test "parses object with single boolean value" do
+      assert JsonParserElixir.parse(~s({"active": true})) == {:ok, %{"active" => true}}
+    end
 
-    # test "parses object with null value" do
-    #   assert JsonParserElixir.parse(~s({"data": null})) == {:ok, %{"data" => nil}}
-    # end
+    test "parses object with null value" do
+      assert JsonParserElixir.parse(~s({"data": null})) == {:ok, %{"data" => nil}}
+    end
 
-    # test "parses object with multiple key-value pairs" do
-    #   json = ~s({"name": "John", "age": 30, "active": true})
-    #   expected = %{"name" => "John", "age" => 30, "active" => true}
-    #   assert JsonParserElixir.parse(json) == {:ok, expected}
-    # end
+    test "parses object with multiple key-value pairs" do
+      json = ~s({"name": "John", "age": 30, "active": true})
+      expected = %{"name" => "John", "age" => 30, "active" => true}
+      assert JsonParserElixir.parse(json) == {:ok, expected}
+    end
 
-    # test "parses nested objects" do
-    #   json = ~s({"person": {"name": "John", "age": 30}})
-    #   expected = %{"person" => %{"name" => "John", "age" => 30}}
-    #   assert JsonParserElixir.parse(json) == {:ok, expected}
-    # end
+    test "parses nested objects" do
+      json = ~s({"person": {"name": "John", "age": 30}})
+      expected = %{"person" => %{"name" => "John", "age" => 30}}
+      assert JsonParserElixir.parse(json) == {:ok, expected}
+    end
 
-    # test "parses object with array value" do
-    #   json = ~s({"numbers": [1, 2, 3]})
-    #   expected = %{"numbers" => [1, 2, 3]}
-    #   assert JsonParserElixir.parse(json) == {:ok, expected}
-    # end
+    test "parses object with array value" do
+      json = ~s({"numbers": [1, 2, 3]})
+      expected = %{"numbers" => [1, 2, 3]}
+      assert JsonParserElixir.parse(json) == {:ok, expected}
+    end
 
-    # test "parses object with whitespace" do
-    #   json = ~s({ "name" : "John" })
-    #   assert JsonParserElixir.parse(json) == {:ok, %{"name" => "John"}}
-    # end
+    test "parses object with whitespace" do
+      json = ~s({ "name" : "John" })
+      assert JsonParserElixir.parse(json) == {:ok, %{"name" => "John"}}
+    end
 
-    # test "parses object with newlines" do
-    #   json = """
-    #   {
-    #     "name": "John",
-    #     "age": 30
-    #   }
-    #   """
+    test "parses object with newlines" do
+      json = """
+      {
+        "name": "John",
+        "age": 30
+      }
+      """
 
-    #   expected = %{"name" => "John", "age" => 30}
-    #   assert JsonParserElixir.parse(json) == {:ok, expected}
-    # end
+      expected = %{"name" => "John", "age" => 30}
+      assert JsonParserElixir.parse(json) == {:ok, expected}
+    end
 
-    # test "parses empty object with whitespace" do
-    #   assert JsonParserElixir.parse("{   }") == {:ok, %{}}
-    # end
+    test "parses empty object with whitespace" do
+      assert JsonParserElixir.parse("{   }") == {:ok, %{}}
+    end
   end
 
   # # =============================================================================

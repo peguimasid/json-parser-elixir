@@ -112,11 +112,30 @@ defmodule JsonParserElixir do
     parse(value, [:array | rest], [acc | elements])
   end
 
-  # Object: entry - start object parsing
+  # Object: entry
   defp parse(<<?{, t::binary>>, [:value | rest], _acc), do: parse(t, [:object | rest], %{})
 
-  # Object: finalize - close object and return it
+  # Object: finalize
   defp parse(<<?}, t::binary>>, [:object | rest], acc), do: parse(t, rest, acc)
+
+  # Object: skip colons between keys and values
+  defp parse(<<?:, t::binary>>, ctx, acc), do: parse(t, ctx, acc)
+
+  # Object: prepare to parse next key
+  defp parse(value, [:object | rest], acc) do
+    ctx = [:value, {:object, acc}] ++ rest
+    parse(value, ctx, acc)
+  end
+
+  # Object: save key, prepare to parse value
+  defp parse(value, [{:object, map} | rest], acc) do
+    parse(value, [:value, {:object, acc, map} | rest], acc)
+  end
+
+  # Object: collect value into map (key from tuple, value from acc)
+  defp parse(value, [{:object, key, map} | rest], acc) do
+    parse(value, [:object | rest], Map.put(map, key, acc))
+  end
 
   ### UTILS
 
